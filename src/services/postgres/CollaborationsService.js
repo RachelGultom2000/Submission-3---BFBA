@@ -18,7 +18,7 @@ class CollaborationsService{
         if(!addResult.rows.length){
             throw new InvariantError('Kolaborasi gagal ditambahkan');
         }
-        return result.rows[0].id;
+        return addResult.rows[0].id;
     }
 
     async deleteFromCollaboration(playlistId, userId){
