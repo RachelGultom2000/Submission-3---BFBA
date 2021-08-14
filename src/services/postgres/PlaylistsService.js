@@ -7,9 +7,10 @@ const AuthorizationError = require('../../exceptions/AuthorizationError');
 
  
 class PlaylistsService {
-  constructor(collaborationService) {
+  constructor(collaborationService,cacheService) {
     this._pool = new Pool();
     this._collaborationService = collaborationService;
+    this._cacheService = cacheService;
   }
  
   async addPlaylist({name, owner}) {
@@ -128,10 +129,16 @@ async addPlaylistSong(playlistId, songId){
     if(!addplaylistResult.rows.length){
         throw new InvariantError('lagu gagal ditambahkan ke playlist');
     }
+
+    await this._cacheService.delete(`playlist:${playlistId}`);
     return addplaylistResult.rows[0].id;
 }
 
 async getPlaylistSongs(playlistId){
+    try{
+        const getplaylistResult = await this._cacheService.getIdResult(`playlist:${playlistId}`);
+        return JSON.parse(getplaylistResult);
+    }catch(error){
     const getplaylistQuery = {
         text: `SELECT songs.id, songs.title, songs.performer FROM songs
         LEFT JOIN playlistsongs ON playlistsongs.song_id = songs.id
@@ -139,7 +146,13 @@ async getPlaylistSongs(playlistId){
         values: [playlistId],
     };
     const getplaylistResult = await this._pool.query(getplaylistQuery);
-    return getplaylistResult.rows.map(mapDBToModel);
+    // return getplaylistResult.rows.map(mapDBToModel);
+    const storemapResult = getplaylistResult.rows.map(mapDBToModel);
+
+    await this._cacheService.editPlaylistById(`playlist:${playlistId}`,JSON.stringify());
+
+    return storemapResult;
+}
 }
 
 async deletePlaylistSongById(playlistId,songId){
@@ -152,6 +165,7 @@ async deletePlaylistSongById(playlistId,songId){
     if(!deleteplaylistResult.rows.length){
         throw new InvariantError('Lagu gagal dihapus dari playlist.Id lagu tidak ditemukan');
     }
+    await this._cacheService.delete(`playlist:${playlistId}`);
 }
   
 }

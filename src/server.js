@@ -4,6 +4,7 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 const path = require('path');
+const Inert = require('@hapi/inert');
 
 
 // songs
@@ -44,11 +45,15 @@ const uploads = require('./api/uploads');
 const StorageService = require('./services/storage/StorageService');
 const UploadsValidator = require('./validator/uploads');
 
+// Cache Redis
+const CacheService = require('./services/redis/CacheService');
+
 const init = async () => {
+    const cacheService = new CacheService();
     const songsService = new SongsService();
     const usersService = new UsersService();
-    const collaborationsService = new CollaborationsService();
-    const playlistsService = new PlaylistService(collaborationsService);
+    const collaborationsService = new CollaborationsService(cacheService);
+    const playlistsService = new PlaylistService(collaborationsService,cacheService);
     const authenticationsService = new AuthenticationsService();
     const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
 
@@ -84,6 +89,9 @@ const init = async () => {
         {
             plugin: Jwt,
         },
+        {
+            plugin: Inert,
+        }
     ]);
 
     server.auth.strategy('playlistsapp_jwt','jwt', {
