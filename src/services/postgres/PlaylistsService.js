@@ -136,7 +136,7 @@ async addPlaylistSong(playlistId, songId){
 
 async getPlaylistSongs(playlistId){
     try{
-        const getplaylistResult = await this._cacheService.getIdResult(`playlist:${playlistId}`);
+        const getplaylistResult = await this._cacheService.get(`playlist:${playlistId}`);
         return JSON.parse(getplaylistResult);
     }catch(error){
     const getplaylistQuery = {
@@ -149,7 +149,7 @@ async getPlaylistSongs(playlistId){
     // return getplaylistResult.rows.map(mapDBToModel);
     const storemapResult = getplaylistResult.rows.map(mapDBToModel);
 
-    await this._cacheService.editPlaylistById(`playlist:${playlistId}`,JSON.stringify());
+    await this._cacheService.set(`playlist:${playlistId}`,JSON.stringify());
 
     return storemapResult;
 }

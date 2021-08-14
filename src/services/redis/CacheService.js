@@ -39,7 +39,7 @@ class CacheService{
         });
     }
 
-    delet(key){
+    delete(key){
         return new Promise((resolve, reject) => {
             this._client.del(key, (error,count) => {
                 if(error){
