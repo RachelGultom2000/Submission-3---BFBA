@@ -4,7 +4,7 @@ const routes = (handler) => [
     {
         method: 'POST',
         path: '/upload/pictures',
-        handler: handler.postUploadImageHandler,
+        handler: handler.postToUploadImageHandler,
         options: {
             payload: {
                 allow: 'multipart/form-data',
@@ -19,7 +19,7 @@ const routes = (handler) => [
         path: '/upload/{param*}',
         handler: {
             directory: {
-                path: path.resolve(__dirname, 'file'),
+            path: path.resolve(__dirname, 'file'),
         },
     },
 },

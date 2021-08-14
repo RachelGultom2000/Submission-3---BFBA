@@ -5,10 +5,10 @@ class UploadsHandler {
         this._service = service;
         this._validator = validator;
 
-        this.postUploadImageHandler = this.postUploadImageHandler.bind(this);
+        this.postToUploadImageHandler = this.postToUploadImageHandler.bind(this);
     }
 
-    async postUploadImageHandler(request, h){
+    async postToUploadImageHandler(request, h){
         try{
             const {data} = request.payload;
             this._validator.validateImageHeaders(data.hapi.headers);
@@ -19,7 +19,7 @@ class UploadsHandler {
                 status: 'success',
                 message: 'Gambar berhasil diunggah',
                 data: {
-                    pictureUrlz: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`,
+                    pictureUrl: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`,
                 },
             });
             response.code(201);

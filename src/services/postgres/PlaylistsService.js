@@ -149,7 +149,7 @@ async getPlaylistSongs(playlistId){
     // return getplaylistResult.rows.map(mapDBToModel);
     const storemapResult = getplaylistResult.rows.map(mapDBToModel);
 
-    await this._cacheService.set(`playlist:${playlistId}`,JSON.stringify());
+    await this._cacheService.set(`playlist:${playlistId}`,JSON.stringify(storemapResult));
 
     return storemapResult;
 }
