@@ -11,7 +11,7 @@ class ExportsHandler {
         async postExportPlaylistHandler(request ,h){
             try{
                 const { playlistId } = request.params;
-                const {id: credentialId } = request.auth.credentials;
+                const { id: credentialId } = request.auth.credentials;
                 await this._playlistService.verifyPlaylistAccess(playlistId, credentialId);
 
                 this._validator.validateExportPlaylistPayload(request.payload);
@@ -24,7 +24,7 @@ class ExportsHandler {
 
                 const response = h.response({
                     status: 'success',
-                    message: 'Permintaan anda sedang kami proses',
+                    message: 'Permintaan anda dalam antrean',
                 });
 
                 response.code(201);
