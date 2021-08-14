@@ -7,12 +7,12 @@ class AuthenticationsHandler {
     this._tokenManager = tokenManager;
     this._validator = validator;
  
-    this.postAuthenticationHandler = this.postAuthenticationHandler.bind(this);
-    this.putAuthenticationHandler = this.putAuthenticationHandler.bind(this);
-    this.deleteAuthenticationHandler = this.deleteAuthenticationHandler.bind(this);
+    this.postToAuthenticationHandler = this.postToAuthenticationHandler.bind(this);
+    this.putToAuthenticationHandler = this.putToAuthenticationHandler.bind(this);
+    this.deleteFromAuthenticationHandler = this.deleteFromAuthenticationHandler.bind(this);
   }
  
-  async postAuthenticationHandler(request, h) {
+  async postToAuthenticationHandler(request, h) {
     try {
       this._validator.validatePostAuthenticationPayload(request.payload);
  
@@ -55,7 +55,7 @@ class AuthenticationsHandler {
     }
   }
  
-  async putAuthenticationHandler(request, h) {
+  async putToAuthenticationHandler(request, h) {
     try {
       this._validator.validatePutAuthenticationPayload(request.payload);
  
@@ -92,7 +92,7 @@ class AuthenticationsHandler {
     }
   }
  
-  async deleteAuthenticationHandler(request, h) {
+  async deleteFromAuthenticationHandler(request, h) {
     try {
       this._validator.validateDeleteAuthenticationPayload(request.payload);
  

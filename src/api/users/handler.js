@@ -5,11 +5,11 @@ class UsersHandler {
         this._service = service;
         this._validator = validator;
 
-        this.postUserHandler = this.postUserHandler.bind(this);
-        this.getUserByIdHandler = this.getUserByIdHandler.bind(this);
+        this.postToUserHandler = this.postToUserHandler.bind(this);
+        this.getFromUserByIdHandler = this.getFromUserByIdHandler.bind(this);
     }
 
-    async postUserHandler(request,h){
+    async postToUserHandler(request,h){
         try{
             this._validator.validateUserPayload(request.payload);
             const {username,password,fullname} = request.payload;
@@ -46,7 +46,7 @@ class UsersHandler {
         }
     }
 
-    async getUserByIdHandler(request, h) {
+    async getFromUserByIdHandler(request, h) {
         try {
             const {id} = request.params;
             const user = await this._service.getFromUserById(id);

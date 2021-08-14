@@ -5,9 +5,9 @@ module.exports = {
     name: 'collaborations',
     version: '1.0.0',
     register: async (server, {collaborationsService, playlistsService, validator}) => {
-        const collaborationsHandler = new CollaborationsHandler(
+        const collaborationsapiHandler = new CollaborationsHandler(
             collaborationsService, playlistsService, validator,
         );
-        server.route(routes(collaborationsHandler));
+        server.route(routes(collaborationsapiHandler));
     },
 };

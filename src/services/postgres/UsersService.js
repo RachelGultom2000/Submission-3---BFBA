@@ -15,12 +15,12 @@ class UsersService{
 
         const id = `user-${nanoid(16)}`;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const query = {
+        const adduserQuery = {
             text : 'INSERT INTO users VALUES($1,$2,$3,$4) RETURNING id',
             values: [id,username,hashedPassword,fullname],
         };
 
-        const addResult = await this._pool.query(query);
+        const addResult = await this._pool.query(adduserQuery);
 
         if(!addResult.rows.length){
             throw new InvariantError('User gagal ditambahkan');
@@ -32,12 +32,12 @@ class UsersService{
 
 
     async verifyAllNewUsername(username){
-        const query = {
+        const verifyuserQuery = {
             text : 'SELECT username FROM users WHERE username = $1',
             values: [username],
         };
 
-        const verifyResult = await this._pool.query(query);
+        const verifyResult = await this._pool.query(verifyuserQuery);
 
         if(verifyResult.rows.length > 0){
             throw new InvariantError('Gagal menambahkan user.Username sudah digunakan')
@@ -45,12 +45,12 @@ class UsersService{
     }
 
     async getFromUserById(userId){
-        const query = {
+        const getuserQuery = {
             text: 'SELECT id, username,fullname FROM users WHERE id = $1',
             values: [userId],
         };
 
-        const getResult = await this._pool.query(query);
+        const getResult = await this._pool.query(getuserQuery);
 
         if(!getResult.rows.length){
             throw new NotFoundError('User tidak ditemukan');
@@ -60,11 +60,11 @@ class UsersService{
     }
 
     async verifyFromUserCredential(username, password) {
-        const query = {
+        const verifycredentialQuery = {
           text: 'SELECT id, password FROM users WHERE username = $1',
           values: [username],
         };
-        const verifyResult = await this._pool.query(query);
+        const verifyResult = await this._pool.query(verifycredentialQuery);
 
         if(!verifyResult.rows.length){
             throw new AuthenticationError('Kredensial yang Anda berikan salah');
@@ -72,9 +72,9 @@ class UsersService{
 
         const { id,password: hashedPassword } = verifyResult.rows[0];
 
-        const match = await bcrypt.compare(password,hashedPassword);
+        const matchVerify = await bcrypt.compare(password,hashedPassword);
 
-        if(!match){
+        if(!matchVerify){
             throw new AuthenticationError('Kredensial yang Anda berikan salah');
         }
 
